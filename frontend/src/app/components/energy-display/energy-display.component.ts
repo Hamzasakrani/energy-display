@@ -13,19 +13,20 @@ export class EnergyDisplayComponent implements OnInit {
   peakTime: string = '';
   totalConsumption: number = 0;
   mostFrequentStatus: string = '';
-  displayedColumns: string[] = ['time', 'value'];
+  displayedColumns: string[] = ['time', 'value', 'status'];
 
   constructor(private dataService: EnergyDisplayService) {}
 
   ngOnInit() {
     this.fetchData();
+    this.summaryData();
   }
 
   fetchData() {
     // Assuming dataService.getData returns an Observable of your data
     this.dataService.getData().subscribe((data) => {
       this.data = data;
-      console.log(data);
+
       //  this.calculateMetrics();
     });
   }
@@ -34,7 +35,14 @@ export class EnergyDisplayComponent implements OnInit {
     // Calculate your metrics based on this.data
     // Update this.average, this.peakTime, this.totalConsumption, this.mostFrequentStatus
   }
-
+  summaryData() {
+    this.dataService.summaryData().subscribe((data) => {
+      this.average = data.averageEnergyConsumption;
+      this.peakTime = data.highestEnergyTimestamp;
+      this.totalConsumption = data.totalEnergyConsumed;
+      this.mostFrequentStatus = data.mostFrequentStatus;
+    });
+  }
   simulateNewData() {
     this.dataService.simulateNewData().subscribe((newData) => {
       this.data.push(newData);

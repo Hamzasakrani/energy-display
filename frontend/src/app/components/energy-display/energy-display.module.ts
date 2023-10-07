@@ -7,6 +7,7 @@ import { EnergyDisplayComponent } from './energy-display.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 @NgModule({
   declarations: [EnergyDisplayComponent],
@@ -17,6 +18,7 @@ import { MatCardModule } from '@angular/material/card';
     MatTableModule,
     MatButtonModule,
     MatCardModule,
+    MatGridListModule,
   ],
 })
 export class EnergyDisplayModule {}

@@ -1,6 +1,7 @@
 from flask import Flask, jsonify
 from flask_pymongo import PyMongo
 import random
+from collections import Counter
 from datetime import datetime, timedelta
 from datetime import datetime
 from flask_cors import CORS
@@ -26,6 +27,8 @@ def generate_data():
 
     # Insert into MongoDB
     mongo.db.datapoints.insert_one(data_point)
+    twenty_four_hours_ago = datetime.utcnow() - timedelta(days=1)
+    mongo.db.datapoints.delete_many({"timestamp": {"$lt": twenty_four_hours_ago}})
 
     return jsonify({"message": "Data generated successfully!"}), 201
 
@@ -33,14 +36,47 @@ def generate_data():
 def retrieve_data():
     twenty_four_hours_ago = datetime.utcnow() - timedelta(days=1)
     
-    # Querying MongoDB for the last 24 hours of data
+    #last 24 hours data
     data = list(mongo.db.datapoints.find({"timestamp": {"$gte": twenty_four_hours_ago}}))
-
-    # Convert MongoDB objects to JSON serializable format
+    
+    #parse data 
     for item in data:
         item["_id"] = str(item["_id"])
         item["timestamp"] = item["timestamp"].strftime('%Y-%m-%d %H:%M:%S')
 
     return jsonify(data)    
+
+@app.route('/summary', methods=['GET'])
+def summary():
+    twenty_four_hours_ago = datetime.utcnow() - timedelta(days=1)
+    
+    
+    data = list(mongo.db.datapoints.find({"timestamp": {"$gte": twenty_four_hours_ago}}))
+
+    
+    if not data:
+        return jsonify({"message": "No data available for the last 24 hours."}), 404
+
+   
+    total_energy = sum(item['energyConsumption'] for item in data)
+    average_energy = total_energy / len(data)
+    
+    
+    max_energy_data_point = max(data, key=lambda x: x['energyConsumption'])
+    max_energy_timestamp = max_energy_data_point['timestamp'].strftime('%Y-%m-%d %H:%M:%S')
+    
+ 
+    status_counts = Counter(item['deviceStatus'] for item in data)
+    most_frequent_status = status_counts.most_common(1)[0][0]
+
+ 
+    metrics = {
+        "averageEnergyConsumption": average_energy,
+        "highestEnergyTimestamp": max_energy_timestamp,
+        "totalEnergyConsumed": total_energy,
+        "mostFrequentStatus": most_frequent_status
+    }
+
+    return jsonify(metrics)    
 if __name__ == "__main__":
     app.run(debug=True)    

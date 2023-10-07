@@ -13,6 +13,9 @@ export class EnergyDisplayService {
   }
 
   simulateNewData(): Observable<any> {
-    return this.http.get<any>('http://localhost:5000/retrieve_data');
+    return this.http.get<any>('http://localhost:5000/generate_data');
+  }
+  summaryData(): Observable<any> {
+    return this.http.get<any>('http://localhost:5000/summary');
   }
 }
