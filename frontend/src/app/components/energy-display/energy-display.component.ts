@@ -40,6 +40,7 @@ export class EnergyDisplayComponent implements OnInit {
       data.map((element) => {
         this.barChartLabels.push(element.timestamp);
         this.dataEnergyChart.push(element.energyConsumption);
+        this.barChartData = [{ data: this.dataEnergyChart, label: 'Energy' }];
       });
     });
   }

@@ -25,9 +25,11 @@
     <mat-card-title>Chart</mat-card-title></mat-card-header>
   <mat-card-content>
     <div style="display: block;">
-      <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
-        [legend]="barChartLegend">
-      </canvas>
+      <div *ngIf="barChartLabels">
+        <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
+          [legend]="barChartLegend">
+        </canvas>
+      </div>
     </div>
   </mat-card-content>
 </mat-card>
