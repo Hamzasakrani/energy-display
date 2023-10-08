@@ -11,8 +11,11 @@
   <mat-grid-tile [colspan]="1" [rowspan]="1"><button mat-raised-button color="primary"
       (click)="simulateNewData()">Simulate</button></mat-grid-tile>
 </mat-grid-list>
-
-
+<div style="display: block;">
+  <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
+    [legend]="barChartLegend">
+  </canvas>
+</div>
 <mat-table [dataSource]="data">
   <!-- Define columns -->
   <ng-container matColumnDef="time">

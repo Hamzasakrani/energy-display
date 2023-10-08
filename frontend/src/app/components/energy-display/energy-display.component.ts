@@ -14,27 +14,36 @@ export class EnergyDisplayComponent implements OnInit {
   totalConsumption: number = 0;
   mostFrequentStatus: string = '';
   displayedColumns: string[] = ['time', 'value', 'status'];
+  barChartOptions = {
+    scaleShowVerticalLines: false,
+    responsive: true,
+  };
+
+  barChartLabels: Int16Array[] = [];
+  barChartType = 'bar';
+  barChartLegend = true;
+  dataEnergyChart: string[] = [];
+
+  barChartData = [{ data: this.dataEnergyChart, label: 'Energy' }];
 
   constructor(private dataService: EnergyDisplayService) {}
 
   ngOnInit() {
+    //Init my componet with backend data
     this.fetchData();
     this.summaryData();
   }
 
   fetchData() {
-    // Assuming dataService.getData returns an Observable of your data
     this.dataService.getData().subscribe((data) => {
       this.data = data;
-
-      //  this.calculateMetrics();
+      data.map((element) => {
+        this.barChartLabels.push(element.timestamp);
+        this.dataEnergyChart.push(element.energyConsumption);
+      });
     });
   }
-
-  calculateMetrics() {
-    // Calculate your metrics based on this.data
-    // Update this.average, this.peakTime, this.totalConsumption, this.mostFrequentStatus
-  }
+  // Summary data to to calculate metrics
   summaryData() {
     this.dataService.summaryData().subscribe((data) => {
       this.average = data.averageEnergyConsumption;
@@ -43,10 +52,11 @@ export class EnergyDisplayComponent implements OnInit {
       this.mostFrequentStatus = data.mostFrequentStatus;
     });
   }
+  // Generate new data
   simulateNewData() {
-    this.dataService.simulateNewData().subscribe((newData) => {
-      this.data.push(newData);
-      //   this.calculateMetrics();
+    this.dataService.simulateNewData().subscribe(() => {
+      this.fetchData();
+      this.summaryData();
     });
   }
 }

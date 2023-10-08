@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
+//lazy loading my component will be created after call energy-display URL
 const routes: Routes = [
   {
     path: 'energy-display',
