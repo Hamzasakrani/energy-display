@@ -19,6 +19,8 @@ flask run
 
 # Application
 
+Url : http://localhost:4200/energy-display
+
 ## Summary
 
 ![Alt text](readmeimage/summary.png?raw=true "Summary")
