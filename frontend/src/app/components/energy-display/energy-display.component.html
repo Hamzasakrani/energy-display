@@ -1,36 +1,57 @@
-<mat-grid-list cols="4" rowHeight="2:1">
-  <mat-grid-tile [colspan]="3" [rowspan]="1">
-    <div class="text-inside-grid">
-      <p>Average: {{ average }}</p>
-      <p>Peak Time: {{ peakTime }}</p>
-      <p>Total Consumption: {{ totalConsumption }}</p>
-      <p>Most Frequent Status: {{ mostFrequentStatus }}</p>
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Summary</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-grid-list cols="4" rowHeight="2:1">
+      <mat-grid-tile [colspan]="3" [rowspan]="1">
+        <div class="text-inside-grid">
+          <p><strong>Average:</strong> {{ average }}</p>
+          <p><strong>Peak Time:</strong><span class="peak-time"> {{ peakTime }}</span></p>
+          <p><strong>Total Consumption:</strong> {{ totalConsumption }}</p>
+          <p><strong>Most Frequent Status:</strong> {{ mostFrequentStatus }}</p>
+        </div>
+
+      </mat-grid-tile>
+      <mat-grid-tile [colspan]="1" [rowspan]="1"><button class="my-blue-btn"
+          (click)="simulateNewData()">Simulate</button></mat-grid-tile>
+    </mat-grid-list>
+  </mat-card-content>
+
+
+</mat-card>
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Chart</mat-card-title></mat-card-header>
+  <mat-card-content>
+    <div style="display: block;">
+      <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
+        [legend]="barChartLegend">
+      </canvas>
     </div>
+  </mat-card-content>
+</mat-card>
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Energy Display</mat-card-title></mat-card-header>
+  <mat-card-content>
+    <mat-table [dataSource]="data">
+      <!-- Define columns -->
+      <ng-container matColumnDef="time">
+        <mat-header-cell *matHeaderCellDef> Time </mat-header-cell>
+        <mat-cell *matCellDef="let dataPoint"> {{dataPoint.timestamp}} </mat-cell>
+      </ng-container>
 
-  </mat-grid-tile>
-  <mat-grid-tile [colspan]="1" [rowspan]="1"><button mat-raised-button color="primary"
-      (click)="simulateNewData()">Simulate</button></mat-grid-tile>
-</mat-grid-list>
-<div style="display: block;">
-  <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
-    [legend]="barChartLegend">
-  </canvas>
-</div>
-<mat-table [dataSource]="data">
-  <!-- Define columns -->
-  <ng-container matColumnDef="time">
-    <mat-header-cell *matHeaderCellDef> Time </mat-header-cell>
-    <mat-cell *matCellDef="let dataPoint"> {{dataPoint.timestamp}} </mat-cell>
-  </ng-container>
-
-  <ng-container matColumnDef="value">
-    <mat-header-cell *matHeaderCellDef> Value </mat-header-cell>
-    <mat-cell *matCellDef="let dataPoint"> {{dataPoint.energyConsumption}} </mat-cell>
-  </ng-container>
-  <ng-container matColumnDef="status">
-    <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
-    <mat-cell *matCellDef="let dataPoint"> {{dataPoint.deviceStatus}} </mat-cell>
-  </ng-container>
-  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-</mat-table>
+      <ng-container matColumnDef="value">
+        <mat-header-cell *matHeaderCellDef> Value </mat-header-cell>
+        <mat-cell *matCellDef="let dataPoint"> {{dataPoint.energyConsumption}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="status">
+        <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+        <mat-cell *matCellDef="let dataPoint"> {{dataPoint.deviceStatus}} </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+  </mat-card-content>
+</mat-card>

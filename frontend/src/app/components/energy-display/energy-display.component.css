@@ -2,3 +2,25 @@
   position: absolute;
   left: 5px;
 }
+.my-blue-btn {
+    font-family: "Poppins", Sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: #FFFFFF;
+    background-color: #39B449;
+    border-style: none;
+    border-radius: 4px 4px 4px 4px;
+      vertical-align: middle;
+    text-align: center;
+        position: relative;
+    display: inline-block;
+    line-height: 1;
+        padding: 15px 30px;
+}
+.my-blue-btn:hover {
+  background-color: #2c7e2e; /* Green */
+  color: white;
+}
+.peak-time{
+  color: #d44444;
+}
